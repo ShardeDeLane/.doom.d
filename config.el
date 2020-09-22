@@ -25,7 +25,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-molokai)
+(setq doom-theme 'zaiste)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -35,26 +35,34 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;; Emmet Mode
+(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(add-hook 'js2-mode-hook  'emmet-mode) ;; enable Emmet's js abbreviation.
+(add-hook 'js-mode-hook  'emmet-mode) ;; enable Emmet's js abbreviation.
+(add-hook 'rjsx-mode-hook  'emmet-mode) ;; enable Emmet's js abbreviation.
+(add-hook 'emmet-mode-hook (lambda () (setq emmet-indent-after-insert nil)))
+(add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2))) ;; indent 2 spaces.
+(setq emmet-expand-jsx-className? t) ;; default nil
+;;(use-package emmet-mode
+;;  :ensure t
+;;  :hook (web-mode css-mode scss-mode sgml-mode rjsx-mode js2-mode js-mode)
+;;  :config
+;;  (add-hook 'emmet-mode-hook (lambda()
+                             ;; (setq emmet-indent-after-insert t))))
 
-;; Here are some additional functions/macros that could help you configure Doom:
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
+
+;; centaur-tabs
 (use-package centaur-tabs
    :load-path "~/.emacs.d/other/centaur-tabs"
    :config
    (setq centaur-tabs-style "bar"
-        centaur-tabs-height 32
-        centaur-tabs-set-icons t
-        centaur-tabs-set-modified-marker t
-        centaur-tabs-show-navigation-buttons t
-        centaur-tabs-set-bar 'under
-        x-underline-at-descent-line t)
+      centaur-tabs-height 32
+      centaur-tabs-set-icons t
+      centaur-tabs-set-modified-marker t
+      centaur-tabs-show-navigation-buttons t
+      centaur-tabs-set-bar 'under
+      x-underline-at-descent-line t)
    (centaur-tabs-headline-match)
    ;; (setq centaur-tabs-gray-out-icons 'buffer)
    ;; (centaur-tabs-enable-buffer-reordering)
@@ -70,38 +78,38 @@
  Other buffer group by `centaur-tabs-get-group-name' with project name."
      (list
       (cond
-      ;; ((not (eq (file-remote-p (buffer-file-name)) nil))
-      ;; "Remote")
-      ((or (string-equal "*" (substring (buffer-name) 0 1))
-           (memq major-mode '(magit-process-mode
-                        magit-status-mode
-                        magit-diff-mode
-                        magit-log-mode
-                        magit-file-mode
-                        magit-blob-mode
-                        magit-blame-mode
-                        )))
-       "Emacs")
-      ((derived-mode-p 'prog-mode)
-       "Editing")
-      ((derived-mode-p 'dired-mode)
-       "Dired")
-      ((memq major-mode '(helpful-mode
-                      help-mode))
-       "Help")
-      ((memq major-mode '(org-mode
-                      org-agenda-clockreport-mode
-                      org-src-mode
-                      org-agenda-mode
-                      org-beamer-mode
-                      org-indent-mode
-                      org-bullets-mode
-                      org-cdlatex-mode
-                      org-agenda-log-mode
-                      diary-mode))
-       "OrgMode")
-      (t
-       (centaur-tabs-get-group-name (current-buffer))))))
+    ;; ((not (eq (file-remote-p (buffer-file-name)) nil))
+    ;; "Remote")
+    ((or (string-equal "*" (substring (buffer-name) 0 1))
+         (memq major-mode '(magit-process-mode
+                magit-status-mode
+                magit-diff-mode
+                magit-log-mode
+                magit-file-mode
+                magit-blob-mode
+                magit-blame-mode
+                )))
+     "Emacs")
+    ((derived-mode-p 'prog-mode)
+     "Editing")
+    ((derived-mode-p 'dired-mode)
+     "Dired")
+    ((memq major-mode '(helpful-mode
+                help-mode))
+     "Help")
+    ((memq major-mode '(org-mode
+                org-agenda-clockreport-mode
+                org-src-mode
+                org-agenda-mode
+                org-beamer-mode
+                org-indent-mode
+                org-bullets-mode
+                org-cdlatex-mode
+                org-agenda-log-mode
+                diary-mode))
+     "OrgMode")
+    (t
+     (centaur-tabs-get-group-name (current-buffer))))))
    :hook
    (dashboard-mode . centaur-tabs-local-mode)
    (term-mode . centaur-tabs-local-mode)
@@ -115,12 +123,22 @@
    ("C-c t p" . centaur-tabs-group-by-projectile-project)
    ("C-c t g" . centaur-tabs-group-buffer-groups)
    (:map evil-normal-state-map
-        ("g t" . centaur-tabs-forward)
-        ("g T" . centaur-tabs-backward)))
+      ("g t" . centaur-tabs-forward)
+      ("g T" . centaur-tabs-backward)))
+
+;; Here are some additional functions/macros that could help you configure Doom:
+;;
+;; - `load!' for loading external *.el files relative to this one
+;; - `use-package!' for configuring packages
+;; - `after!' for running code after a package has loaded
+;; - `add-load-path!' for adding directories to the `load-path', relative to
+;;   this file. Emacs searches the `load-path' when you load packages with
+;;   `require' or `use-package'.
+;; - `map!' for binding new keys
+;;
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
 ;; This will open documentation for it, including demos of how they are used.
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-
