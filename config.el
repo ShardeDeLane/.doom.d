@@ -36,21 +36,20 @@
 (setq display-line-numbers-type t)
 
 ;; Emmet Mode
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
-(add-hook 'js2-mode-hook  'emmet-mode) ;; enable Emmet's js abbreviation.
-(add-hook 'js-mode-hook  'emmet-mode) ;; enable Emmet's js abbreviation.
-(add-hook 'rjsx-mode-hook  'emmet-mode) ;; enable Emmet's js abbreviation.
-(add-hook 'emmet-mode-hook (lambda () (setq emmet-indent-after-insert nil)))
-(add-hook 'emmet-mode-hook (lambda () (setq emmet-indentation 2))) ;; indent 2 spaces.
-(setq emmet-expand-jsx-className? t) ;; default nil
 ;;(use-package emmet-mode
-;;  :ensure t
-;;  :hook (web-mode css-mode scss-mode sgml-mode rjsx-mode js2-mode js-mode)
-;;  :config
-;;  (add-hook 'emmet-mode-hook (lambda()
-                             ;; (setq emmet-indent-after-insert t))))
+  ;;:ensure t
+  ;;:hook (web-mode css-mode scss-mode sgml-mode)
+  ;;:config
+  ;;(add-hook 'emmet-mode-hook (lambda()
+    ;;                          (setq emmet-indent-after-insert t))))
+    
+;; Web Mode
+(add-to-list 'auto-mode-alist '("\\.jsx?$" . web-mode))
+(setq web-mode-content-types-alist '(("jsx" . "\\.js[x]?\\'")))
 
+(add-hook 'rjsx-mode-hook
+          (lambda ()
+            (setq-local emmet-expand-jsx-className? t)))
 
 ;; centaur-tabs
 (use-package centaur-tabs
